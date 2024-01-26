@@ -1,7 +1,7 @@
 # Programmierprojekt 23F, 1. Semester
 
 ## 1. Projektteilnehmer/innen
-- Gehl, Thorsten
+- Gehl, Torsten
 - Intorre, Francesco
 - Serban, Daniel
 - Biser, Michael
