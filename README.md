@@ -1,7 +1,7 @@
 # Programmierprojekt 23F, 1. Semester
 # SpaceInvadersGUI
 
-## 1. Projektteilnehmer/innen
+## 1. Projektteilnehmer
 - Gehl, Torsten
 - Intorre, Francesco
 - Serban, Daniel
