@@ -1,7 +1,8 @@
 # Programmierprojekt 23F, 1. Semester
+# SpaceInvadersGUI
 
-## 1. Projektteilnehmer/innen
-- Gehl, Thorsten
+## 1. Projektteilnehmer
+- Gehl, Torsten
 - Intorre, Francesco
 - Serban, Daniel
 - Biser, Michael
@@ -11,10 +12,89 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 &nbsp;
 ## 2. Projektbeschreibung
 
-- Beschreibung der Aufgaben- bzw. Problemstellung
-- Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
-- Angestrebte Lösung aus technischer Sicht
-- Umfang: ca. 1 Seite (DIN A4)
+### 2.1  Beschreibung der Aufgaben- bzw. Problemstellung
+
+### 2.1.1 Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
+
+- Es muss eine grafische Benutzer Oberflaeche vom Anwender gestartet werden koennen.
+	- toDo: Entscheidung ob via Icon oder Kommandozeileneingabe Windows/Terminal Linux
+
+- Nach dem Start des Programmes soll der Anwender seinen Anwendernamen eingeben
+	- ist der Anwender nicht hinterlegt, muss sein Anwendername erst nach Beendigung des Spieles in die hinterlegte Anwenderliste aufgenommen werden mit Namen, erreichte Punktzahl und Datum des letzten Spieles 
+
+- Nach der Eingabe des Anwendernamens soll ein Highscore-Ranking angezeigt werden von allen Anwendern absteigend sortiert mit Datum des letzen Highscore
+
+- Der Anwender soll dann über einen Button gefragt werden ob er das Spiel beginnen moechte
+
+- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rehcts navigiren
+
+- Das Spielfeld muss in 64 Reihen und 64 Spalten unterteilt werden.
+
+- Es muss am oberen Rand (row1/row2) Objekte geben, die dem Anwender als "Target Objekte" dienen.
+	- Es sollte zwei unterschiedliche Targetklassen mit unterschiedlichen Attributen von Punktanzahl geben 
+		- z.B.: KingPin = 10Points, SimpleTarget = 5 Points
+	- Die Target-Objekte sollen in einem zeitlichen Intervall von 0.25 Sekunden von Links nach Rechts bewegen.
+	- Auf der Zeile 1 (row1) bewegen sich die KinPin-Target-Objekte.
+	- Auf der Zeile 2 (row2) bewegen sich die Simple-Target-Objekte.
+
+- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzten" koennen.
+
+- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die aktuelle Punktzahl summieren und das "getroffene" TargetObjekt muss vom Feld geloescht werden.
+
+- der Durchlauf des Programms endet, wenn keine verbleibenden Targetobjekte auf dem Spielfeld verbleiben.
+
+- Zum Ende des Programmdurchlaufs muss der erzielte Punktestand mit dem Datum des Duchlaufs mit dem zugoerigen Anwender erfasst werden.
+
+### 2.1.2  Angestrebte Lösung aus technischer Sicht
+
+1. technisches Erstkonzept 
+- Das Programm wird für Windows OS entwickelt.
+
+- Es muss eine GPL3 oder Apache License V2.0 Library für die grafische Benutzer Oberflaeche verwendet werden (vgl. GTK).
+        - toDo: Entscheidung ob via Icon oder Kommandozeileneingabe Windows/Terminal Linux
+
+- Nach dem Start des Programmes muessen die Daten des Anwenders ueber seinen Anwendernamen aus einer hinterlegten UserInfo.log Datei gelesen werden.
+	- Dazu werden typedef struct user, target, spaceship, rocket angelegt
+
+- Nach der Eingabe des Anwendernamens soll ein Highscore-Ranking angezeigt werden von allen Anwendern absteigend sortiert mit Datum des letzen Highscore.
+	- Dazu muessen die ausgelesenen Anwender mit Highscore und Date des Highscores in eine Datenstruktur gelesen und in einem Fenster angezeigt werden.
+	- Dies wird mit einer while(1) Kontrollstruktur umgesetzt die eine {if(EOF) break} abgebrochen wird. 
+
+
+- Der Anwender soll dann über einen Button gefragt werden ob er das Spiel beginnen moechte.
+	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
+
+- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rehcts navigiren
+	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
+
+- Das Spielfeld muss in 64 Reihen und 64 Spalten unterteilt werden.
+	- Es muss geprueft werden, ob es hierzu ebenfalls Methoden/Funktionen in der verwendeten Library gibt
+
+- Es muss am oberen Rand (row1/row2) Objekte geben, die dem Anwender als "Target Objekte" dienen.
+        - Es sollte zwei unterschiedliche Targetklassen mit unterschiedlichen Attributen von Punktanzahl geben 
+                - typedef struct mit Attribut Points ->  KingPin = 10Points, SimpleTarget = 5 Points
+        - Die Target-Objekte sollen in einem zeitlichen Intervall von 0.25 Sekunden von Links nach Rechts bewegen.
+		- time.h
+        - Auf der Zeile 1 (row1) bewegen sich die KinPin-Target-Objekte.
+        - Auf der Zeile 2 (row2) bewegen sich die Simple-Target-Objekte.
+
+- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzten" koennen.
+	- Es muss geprueft werden, ob es hierzu ebenfalls Methoden/Funktionen in der verwendeten Library gibt
+	- Rocket-Objekt bewegt sich mit 0.25 (Sekunden/Feld) orthogonal (kein Drift) Richtung Row1/Row2
+	- die Betaetigung der Leertaste ist gekoppelt mit der Erzeugung eines Reocket-Objektes. Es wird eine Art Eventlistener benoetigt.
+	- Startpostion Column = Endpositon Column
+	- Startpostion Row = Endpositon (Row - 62/63)
+
+- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die ak>
+	- es muss eine Funktion geschrieben werden, welche die Gleichheit der Reihen und Spalten Elemente von Target-Objekt und Rocket-Objekt prueft.
+	- bei Gleichheit muss actualPointsscore + Attribut Point vom Target-Obejkt berechnet werden.
+
+- der Durchlauf des Programms endet, wenn keine verbleibenden Targetobjekte auf dem Spielfeld verbleiben.
+
+- Zum Ende des Programmdurchlaufs muss der erzielte Punktestand mit dem Datum des Duchlaufs mit dem zugoerigen Anwender erfasst werden.
+	- Dazu wird das typedef struct Objekt User mit Summe der erzielten Punkte in der Datei UserInfo.log mit einer Schleifenkontrollstruktur abgeglichen, wenn Punktzahl hoeher als letze Punkt in Datei geschrieben.
+
+
 
 &nbsp;
 ## 3. Termine
@@ -24,30 +104,3 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 - Abgabe: **14.02.2024** 
 	- Beispielformat: https://github.com/AlexanderMelde/Handlungserkennung
 - Präsentation: **16.02.2024** (Präsenz)
-
-&nbsp;
-## 3. Projektideen
-
-- Grafikprogrammierung
-	- Funktionsplotter in 2D mit einfachem Parser
-	- Vier-Gewinnt Spiel
-	- Kartenspiel
-	- Fraktale 
-
-- Netzwerkprogrammierung
-	- Chat-Programm
-	- Tic-Tac-Toe oder Vier-Gewinnt über Netzwerk
-
-- Algorithmik
-	- Datenbank-Anwendung unter Nutzung einer Baumstruktur (Beispiel-Inhalte: Medien, Personen, etc.)
-	- Funktionsparser unter Nutzung binärer Bäume
-	- Verschlüsselung von Daten in Bildern
-
-- Eigene Ideen :slightly_smiling_face:
-
-&nbsp;
-## 4. Sonstige Verweise
-
-- Markdown Editor: https://markdown-editor.github.io/
-- Writing Github README: https://medium.com/analytics-vidhya/writing-github-readme-e593f278a796
-- Emoji Cheat Sheet: https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md :wink:
