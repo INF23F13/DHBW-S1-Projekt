@@ -17,7 +17,6 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 ### 2.1.1 Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
 
 - Es muss eine grafische Benutzer Oberflaeche vom Anwender gestartet werden koennen.
-	- toDo: Entscheidung ob via Icon oder Kommandozeileneingabe Windows/Terminal Linux
 
 - Nach dem Start des Programmes soll der Anwender seinen Anwendernamen eingeben
 	- ist der Anwender nicht hinterlegt, muss sein Anwendername erst nach Beendigung des Spieles in die hinterlegte Anwenderliste aufgenommen werden mit Namen, erreichte Punktzahl und Datum des letzten Spieles 
@@ -51,7 +50,6 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 - Das Programm wird für Windows OS entwickelt.
 
 - Es muss eine GPL3 oder Apache License V2.0 Library für die grafische Benutzer Oberflaeche verwendet werden (vgl. GTK).
-        - toDo: Entscheidung ob via Icon oder Kommandozeileneingabe Windows/Terminal Linux
 
 - Nach dem Start des Programmes muessen die Daten des Anwenders ueber seinen Anwendernamen aus einer hinterlegten UserInfo.log Datei gelesen werden.
 	- Dazu werden typedef struct user, target, spaceship, rocket angelegt
