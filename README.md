@@ -9,7 +9,6 @@
 
 Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 
-&nbsp;
 ## 2. Projektbeschreibung
 
 ### 2.1  Beschreibung der Aufgaben- bzw. Problemstellung
@@ -95,7 +94,6 @@ Linux-System mit GTK3.0 Desktopoberfläche (z.B. Ubuntu Desktop)
 - Zum Ende des Programmdurchlaufs muss der erzielte Punktestand mit dem Datum des Duchlaufs mit dem zugoerigen Anwender erfasst werden.
 	- Dazu wird das typedef struct Objekt User mit Summe der erzielten Punkte in der Datei UserInfo.log mit einer Schleifenkontrollstruktur abgeglichen, wenn Punktzahl hoeher als letze Punkt in Datei geschrieben.
 
-&nbsp;
 ## 3. Termine
 - Exposé: **29.01.2024** (Punkte 1. und 2. oben)
 	- Einladung Benutzer: https://github.com/jfr609/
