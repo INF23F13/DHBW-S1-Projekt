@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#author: chatgpt
 
 GtkWidget* window;
 GtkWidget* notebook;
