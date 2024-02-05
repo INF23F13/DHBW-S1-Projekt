@@ -15,7 +15,10 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 ### 2.1  Beschreibung der Aufgaben- bzw. Problemstellung
 
 ### 2.1.1 Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
+#### Voraussetzungen
+Linux-System mit GTK3.0 Desktopoberfläche (z.B. Ubuntu Desktop)
 
+#### Funktionsumfang
 - Es muss eine grafische Benutzer Oberflaeche vom Anwender gestartet werden koennen.
 
 - Nach dem Start des Programmes soll der Anwender seinen Anwendernamen eingeben
@@ -91,8 +94,6 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 
 - Zum Ende des Programmdurchlaufs muss der erzielte Punktestand mit dem Datum des Duchlaufs mit dem zugoerigen Anwender erfasst werden.
 	- Dazu wird das typedef struct Objekt User mit Summe der erzielten Punkte in der Datei UserInfo.log mit einer Schleifenkontrollstruktur abgeglichen, wenn Punktzahl hoeher als letze Punkt in Datei geschrieben.
-
-
 
 &nbsp;
 ## 3. Termine
