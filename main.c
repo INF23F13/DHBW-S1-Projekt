@@ -51,7 +51,13 @@ char crossSymbol[] = ">||<";
 char rocketSymbol[] = "!";
 char targetEasySymbol[] = "<>";
 char targetKingpinSymbol[] = "<|>";
-char arrowSymbol = '^';
+
+
+//keine wieteren refernezen, delete?
+//char arrowSymbol = '^';
+
+
+
 
 gboolean move_symbols(gpointer user_data);
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
@@ -60,6 +66,8 @@ void on_window_destroy(GtkWidget *widget, gpointer user_data);
 
 void start_game(GtkWidget *widget, gpointer user_data);
 void update_score(const gchar *username, int points);
+
+void collision_detection();
 
 gboolean read_user_scores(const gchar *username, int *points);
 
@@ -353,28 +361,38 @@ gboolean move_symbols(gpointer user_data) {
 void collision_detection() {
     gboolean all_targets_hit = TRUE;
 
+    // Prüfe Kollisionen mit Raketen
     for (int i = 0; i < 100; i++) {
         if (firedRockets[i].is_visible) {
+            // Prüfe Kollision mit einfachen Zielobjekten
             for (int j = 0; j < 10; j++) {
                 if (targetEasy[j].is_visible && firedRockets[i].row == targetEasy[j].row && firedRockets[i].col == targetEasy[j].col) {
+                    // Kollision mit einfachem Zielobjekt
                     firedRockets[i].is_visible = FALSE;
                     targetEasy[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetEasy[j].points;
                     printf("User Points: %.2d\n", loggedInUser.userPoints);
+                    gtk_label_set_text(GTK_LABEL(score_label), g_strdup_printf("Score: %d", loggedInUser.userPoints));
+                    update_score(loggedInUser.userName, loggedInUser.userPoints);
                 }
             }
 
+            // Prüfe Kollision mit anspruchsvollen Zielobjekten
             for (int j = 0; j < 5; j++) {
                 if (targetKingpin[j].is_visible && firedRockets[i].row == targetKingpin[j].row && firedRockets[i].col == targetKingpin[j].col) {
+                    // Kollision mit anspruchsvollem Zielobjekt
                     firedRockets[i].is_visible = FALSE;
                     targetKingpin[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetKingpin[j].points;
                     printf("User Points: %.2d\n", loggedInUser.userPoints);
+                    gtk_label_set_text(GTK_LABEL(score_label), g_strdup_printf("Score: %d", loggedInUser.userPoints));
+                    update_score(loggedInUser.userName, loggedInUser.userPoints);
                 }
             }
         }
     }
 
+    // Prüfe, ob alle Zielobjekte getroffen wurden
     for (int j = 0; j < 10; j++) {
         if (targetEasy[j].is_visible) {
             all_targets_hit = FALSE;
@@ -389,6 +407,7 @@ void collision_detection() {
         }
     }
 
+    // Wenn alle Zielobjekte getroffen wurden, erstelle neue und verdopple die Bewegungsgeschwindigkeit
     if (all_targets_hit) {
         for (int i = 0; i < 10; i++) {
             targetEasy[i].row = 2;
@@ -408,6 +427,7 @@ void collision_detection() {
             targetKingpin[i].points = 20;
         }
 
+        // Verdopple die Bewegungsgeschwindigkeit
         for (int i = 0; i < 10; i++) {
             targetEasy[i].col += targetEasy[i].move_down ? 2 : -2;
         }
@@ -417,3 +437,4 @@ void collision_detection() {
         }
     }
 }
+
