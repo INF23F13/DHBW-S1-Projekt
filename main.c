@@ -51,23 +51,17 @@ char crossSymbol[] = ">||<";
 char rocketSymbol[] = "!";
 char targetEasySymbol[] = "<>";
 char targetKingpinSymbol[] = "<|>";
-
-
-//keine wieteren refernezen, delete?
-//char arrowSymbol = '^';
-
-
-
+char arrowSymbol = '^';
 
 gboolean move_symbols(gpointer user_data);
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 void on_window_destroy(GtkWidget *widget, gpointer user_data);
+// Forward declaration for collision_detection
+void collision_detection();
 
 void start_game(GtkWidget *widget, gpointer user_data);
 void update_score(const gchar *username, int points);
-
-void collision_detection();
 
 gboolean read_user_scores(const gchar *username, int *points);
 
@@ -323,7 +317,8 @@ gboolean move_symbols(gpointer user_data) {
                 if (targetEasy[i].col <= 0) {
                     targetEasy[i].col = 0;
                     targetEasy[i].move_down = TRUE;
-                    targetEasy[i].row++;
+                    //targetEasy[i].row++;
+					targetEasy[i].row--;
                 }
             }
         }
@@ -337,7 +332,8 @@ gboolean move_symbols(gpointer user_data) {
                 if (targetKingpin[i].col >= 63) {
                     targetKingpin[i].col = 63;
                     targetKingpin[i].move_down = FALSE;
-                    targetKingpin[i].row++;
+                    //targetKingpin[i].row++;
+					targetKingpin[i].row++;
                 }
             } else {
                 targetKingpin[i].col--;
@@ -345,7 +341,7 @@ gboolean move_symbols(gpointer user_data) {
                 if (targetKingpin[i].col <= 0) {
                     targetKingpin[i].col = 0;
                     targetKingpin[i].move_down = TRUE;
-                    targetKingpin[i].row++;
+                    targetKingpin[i].row--;
                 }
             }
         }
