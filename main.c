@@ -10,18 +10,18 @@ GtkWidget *username_label;
 GtkWidget *score_label;
 
 int cross_row = 63;
-int cross_col = 32; //line 304 > 
+int cross_col = 32;
 
-gboolean moving_arrow = FALSE; // dürfte nicht mehr gebraucht werden. keine weiteren referenzen
+gboolean moving_arrow = FALSE;
 
 // Struktur für den eingeloggten Benutzer
 typedef struct {
-    char userName[50]; //pruefen wenn user in datei Load User from fileelse wirte in the file user with point score default
+    char userName[50];
     int userPoints;
     gboolean visible;
 } LoggedInUser;
 
-LoggedInUser loggedInUser; 
+LoggedInUser loggedInUser;
 
 // Struktur für Zielobjekte
 typedef struct {
@@ -29,7 +29,7 @@ typedef struct {
     int col;
     gboolean is_visible;
     char symbol[3];
-    gboolean move_down; // Flag für Richtungswechsel
+    gboolean move_down;
     int points;
 } TargetSymbol;
 
@@ -51,19 +51,20 @@ char crossSymbol[] = ">||<";
 char rocketSymbol[] = "!";
 char targetEasySymbol[] = "<>";
 char targetKingpinSymbol[] = "<|>";
-char arrowSymbol = '^'; // dürfte nicht mehr gebraucht werden. keine weiteren referenzen
+char arrowSymbol = '^';
 
 gboolean move_symbols(gpointer user_data);
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 void on_window_destroy(GtkWidget *widget, gpointer user_data);
+// Forward declaration for collision_detection
+void collision_detection();
 
 void start_game(GtkWidget *widget, gpointer user_data);
 void update_score(const gchar *username, int points);
 
 gboolean read_user_scores(const gchar *username, int *points);
 
-// Hauptfunktion
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
@@ -115,18 +116,14 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-// Funktion zum Starten des Spiels
 void start_game(GtkWidget *widget, gpointer user_data) {
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry));
 
-    // Überprüfen, ob der Benutzername in der Datei vorhanden ist
     int points = 0;
     if (read_user_scores(username, &points)) {
-        // Benutzername gefunden, Punktestand aktualisieren
         loggedInUser.userPoints = points;
         update_score(username, points);
     } else {
-        // Benutzername nicht gefunden, neuen Benutzer erstellen
         loggedInUser.userPoints = 0;
         update_score(username, 0);
     }
@@ -136,7 +133,6 @@ void start_game(GtkWidget *widget, gpointer user_data) {
 
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 
-    // Step 2: Game Start
     GtkWidget *grid = gtk_grid_new();  // Grid für die Anordnung von Widgets
     gtk_container_add(GTK_CONTAINER(notebook), grid);
 
@@ -146,29 +142,28 @@ void start_game(GtkWidget *widget, gpointer user_data) {
     g_signal_connect(G_OBJECT(drawing_area), "draw", G_CALLBACK(on_draw), NULL);
     g_signal_connect(G_OBJECT(window), "key-press-event", G_CALLBACK(on_key_press), NULL);
 
-    g_timeout_add(100, (GSourceFunc)move_symbols, NULL);  // Änderung auf 100 Millisekunden
+    g_timeout_add(100, (GSourceFunc)move_symbols, NULL);
 
     for (int i = 0; i < 100; i++) {
         firedRockets[i].is_visible = FALSE;
     }
 
-    // Setze die Startpositionen der Symbole vom Typ 3 und Typ 4
     for (int i = 0; i < 10; i++) {
-        targetEasy[i].row = 2; //easy target starten auf 2
-        targetEasy[i].col = i * 2; // Breiter Abstand
+        targetEasy[i].row = 2;
+        targetEasy[i].col = i * 2;
         targetEasy[i].is_visible = TRUE;
-        targetEasy[i].move_down = TRUE; // initial direction is down
+        targetEasy[i].move_down = TRUE;
         strcpy(targetEasy[i].symbol, targetEasySymbol);
-        targetEasy[i].points = 10; //hier muesste eigentlich der userPointScore aukualisiert werden
+        targetEasy[i].points = 10;
     }
 
     for (int i = 0; i < 5; i++) {
-        targetKingpin[i].row = 1; //kingpin target starten auf 2
-        targetKingpin[i].col = i * 2; // Breiterer Abstand
+        targetKingpin[i].row = 1;
+        targetKingpin[i].col = i * 2;
         targetKingpin[i].is_visible = TRUE;
-        targetKingpin[i].move_down = TRUE; // initial direction is down
+        targetKingpin[i].move_down = TRUE;
         strcpy(targetKingpin[i].symbol, targetKingpinSymbol);
-        targetKingpin[i].points = 20; //hier muesste eigentlich der userPointScore aukualisiert werden
+        targetKingpin[i].points = 20;
     }
 
     gtk_widget_show_all(window);
@@ -176,8 +171,189 @@ void start_game(GtkWidget *widget, gpointer user_data) {
     gtk_main();
 }
 
+void update_score(const gchar *username, int points) {
+    FILE *file = fopen("userNames_scores.log", "a");
+    if (file != NULL) {
+        fprintf(file, "%s %d\n", username, points);
+        fclose(file);
+    }
+}
 
-// Funktion zur Kollisionsprüfung
+gboolean read_user_scores(const gchar *username, int *points) {
+    FILE *file = fopen("userNames_scores.log", "r");
+    if (file == NULL) {
+        file = fopen("userNames_scores.log", "w");
+        if (file == NULL) {
+            g_print("Error creating file.\n");
+            return FALSE;
+        }
+        fclose(file);
+        *points = 0;
+        return TRUE;
+    }
+
+    gchar buffer[100];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        gchar fileUsername[50];
+        int filePoints;
+        if (sscanf(buffer, "%s %d", fileUsername, &filePoints) == 2) {
+            if (strcmp(username, fileUsername) == 0) {
+                *points = filePoints;
+                fclose(file);
+                return TRUE;
+            }
+        }
+    }
+
+    fclose(file);
+    return FALSE;
+}
+
+void on_window_destroy(GtkWidget *widget, gpointer user_data) {
+    update_score(loggedInUser.userName, loggedInUser.userPoints);
+
+    g_source_remove_by_user_data(GUINT_TO_POINTER(1));
+    gtk_main_quit();
+}
+
+gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
+    switch (event->keyval) {
+        case GDK_KEY_space:
+            for (int i = 0; i < 100; i++) {
+                if (!firedRockets[i].is_visible) {
+                    firedRockets[i].row = cross_row;
+                    firedRockets[i].col = cross_col;
+                    firedRockets[i].is_visible = TRUE;
+                    strcpy(firedRockets[i].symbol, rocketSymbol);
+                    break;
+                }
+            }
+            break;
+        case GDK_KEY_Left:
+            cross_col = MAX(1, cross_col - 1);
+            break;
+        case GDK_KEY_Right:
+            cross_col = MIN(64, cross_col + 1);
+            break;
+        default:
+            break;
+    }
+
+    gtk_widget_queue_draw(drawing_area);
+
+    return TRUE;
+}
+
+gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data) {
+    gint width, height;
+    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
+
+    gint cell_size = MIN(width / 64, height / 64);
+
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 64; j++) {
+            cairo_set_source_rgb(cr, 0.9, 0.9, 0.9);
+            cairo_rectangle(cr, j * cell_size, i * cell_size, cell_size, cell_size);
+            cairo_fill(cr);
+        }
+    }
+
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_set_line_width(cr, 2);
+
+    cairo_move_to(cr, cross_col * cell_size, cross_row * cell_size);
+    cairo_show_text(cr, crossSymbol);
+
+    for (int i = 0; i < 100; i++) {
+        if (firedRockets[i].is_visible) {
+            cairo_move_to(cr, firedRockets[i].col * cell_size, firedRockets[i].row * cell_size);
+            cairo_show_text(cr, firedRockets[i].symbol);
+        }
+    }
+
+    for (int i = 0; i < 10; i++) {
+        if (targetEasy[i].is_visible) {
+            cairo_move_to(cr, targetEasy[i].col * cell_size, targetEasy[i].row * cell_size);
+            cairo_show_text(cr, targetEasy[i].symbol);
+        }
+    }
+
+    for (int i = 0; i < 5; i++) {
+        if (targetKingpin[i].is_visible) {
+            cairo_move_to(cr, targetKingpin[i].col * cell_size, targetKingpin[i].row * cell_size);
+            cairo_show_text(cr, targetKingpin[i].symbol);
+        }
+    }
+
+    return FALSE;
+}
+
+gboolean move_symbols(gpointer user_data) {
+    for (int i = 0; i < 100; i++) {
+        if (firedRockets[i].is_visible) {
+            firedRockets[i].row--;
+
+            if (firedRockets[i].row < 0) {
+                firedRockets[i].is_visible = FALSE;
+            }
+        }
+    }
+
+    collision_detection();
+
+    for (int i = 0; i < 10; i++) {
+        if (targetEasy[i].is_visible) {
+            if (targetEasy[i].move_down) {
+                targetEasy[i].col++;
+
+                if (targetEasy[i].col >= 63) {
+                    targetEasy[i].col = 63;
+                    targetEasy[i].move_down = FALSE;
+                    targetEasy[i].row++;
+                }
+            } else {
+                targetEasy[i].col--;
+
+                if (targetEasy[i].col <= 0) {
+                    targetEasy[i].col = 0;
+                    targetEasy[i].move_down = TRUE;
+                    //targetEasy[i].row++;
+					targetEasy[i].row--;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < 5; i++) {
+        if (targetKingpin[i].is_visible) {
+            if (targetKingpin[i].move_down) {
+                targetKingpin[i].col++;
+
+                if (targetKingpin[i].col >= 63) {
+                    targetKingpin[i].col = 63;
+                    targetKingpin[i].move_down = FALSE;
+                    //targetKingpin[i].row++;
+					targetKingpin[i].row++;
+                }
+            } else {
+                targetKingpin[i].col--;
+
+                if (targetKingpin[i].col <= 0) {
+                    targetKingpin[i].col = 0;
+                    targetKingpin[i].move_down = TRUE;
+                    targetKingpin[i].row--;
+                }
+            }
+        }
+    }
+
+    collision_detection();
+
+    gtk_widget_queue_draw(drawing_area);
+
+    return TRUE;
+}
+
 void collision_detection() {
     gboolean all_targets_hit = TRUE;
 
@@ -191,7 +367,9 @@ void collision_detection() {
                     firedRockets[i].is_visible = FALSE;
                     targetEasy[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetEasy[j].points;
-					printf("User Points: %.2d\n",loggedInUser.userPoints);
+                    printf("User Points: %.2d\n", loggedInUser.userPoints);
+                    gtk_label_set_text(GTK_LABEL(score_label), g_strdup_printf("Score: %d", loggedInUser.userPoints));
+                    update_score(loggedInUser.userName, loggedInUser.userPoints);
                 }
             }
 
@@ -202,7 +380,9 @@ void collision_detection() {
                     firedRockets[i].is_visible = FALSE;
                     targetKingpin[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetKingpin[j].points;
-					printf("User Points: %.2d\n",loggedInUser.userPoints);
+                    printf("User Points: %.2d\n", loggedInUser.userPoints);
+                    gtk_label_set_text(GTK_LABEL(score_label), g_strdup_printf("Score: %d", loggedInUser.userPoints));
+                    update_score(loggedInUser.userName, loggedInUser.userPoints);
                 }
             }
         }
@@ -236,7 +416,7 @@ void collision_detection() {
 
         for (int i = 0; i < 5; i++) {
             targetKingpin[i].row = 1;
-            targetKingpin[i].col = i * 12;
+            targetKingpin[i].col = i * 2;
             targetKingpin[i].is_visible = TRUE;
             targetKingpin[i].move_down = TRUE;
             strcpy(targetKingpin[i].symbol, targetKingpinSymbol);
@@ -252,209 +432,5 @@ void collision_detection() {
             targetKingpin[i].col += targetKingpin[i].move_down ? 2 : -2;
         }
     }
-}
-
-// Funktion zum Lesen der Punkte des Benutzers aus der Datei
-gboolean read_user_scores(const gchar *username, int *points) {
-    FILE *file = fopen("userNames_scores.log", "r");
-    if (file == NULL) {
-        // Die Datei existiert nicht, erstelle sie
-        file = fopen("userNames_scores.log", "w");
-        if (file == NULL) {
-            g_print("Error creating file.\n");
-            return FALSE;
-        }
-        fclose(file);
-
-        // Setze die Punkte auf 0, da der Benutzer neu erstellt wurde
-        *points = 0;
-        return TRUE;
-    }
-
-    gchar buffer[100];
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        gchar fileUsername[50];
-        int filePoints;
-        if (sscanf(buffer, "%s %d", fileUsername, &filePoints) == 2) {
-            if (strcmp(username, fileUsername) == 0) {
-                *points = filePoints;
-                fclose(file);
-                return TRUE;
-            }
-        }
-    }
-
-    fclose(file);
-    return FALSE;
-}
-
-// Funktion zum Aktualisieren des Punktestands des Benutzers in der Datei
-void update_score(const gchar *username, int points) {
-    FILE *file = fopen("userNames_scores.log", "a");
-    if (file != NULL) {
-        fprintf(file, "%s %d\n", username, points);
-        fclose(file);
-    }
-}
-
-// Funktion zum Verarbeiten von Tastatureingaben
-gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
-    switch (event->keyval) {
-        case GDK_KEY_space:
-            for (int i = 0; i < 100; i++) {
-                if (!firedRockets[i].is_visible) {
-                    firedRockets[i].row = cross_row;
-                    firedRockets[i].col = cross_col;
-                    firedRockets[i].is_visible = TRUE;
-                    strcpy(firedRockets[i].symbol, rocketSymbol);
-                    break;
-                }
-            }
-            break;
-        case GDK_KEY_Left:
-            cross_col = MAX(1, cross_col - 1);
-            break;
-        case GDK_KEY_Right:
-            cross_col = MIN(64, cross_col + 1);
-            break;
-        default:
-            break;
-    }
-
-    gtk_widget_queue_draw(drawing_area);
-
-    return TRUE;
-}
-
-// Funktion zum Zeichnen der Spielobjekte
-gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data) {
-    gint width, height;
-    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
-
-    gint cell_size = MIN(width / 64, height / 64);
-
-    for (int i = 0; i < 64; i++) {
-        for (int j = 0; j < 64; j++) {
-            cairo_set_source_rgb(cr, 0.9, 0.9, 0.9);
-            cairo_rectangle(cr, j * cell_size, i * cell_size, cell_size, cell_size);
-            cairo_fill(cr);
-        }
-    }
-
-    cairo_set_source_rgb(cr, 0, 0, 0);
-    cairo_set_line_width(cr, 2);
-
-    // Zeichne den Spieler
-    cairo_move_to(cr, cross_col * cell_size, cross_row * cell_size);
-    cairo_show_text(cr, crossSymbol);
-
-    // Zeichne die abgefeuerten Raketen
-    for (int i = 0; i < 100; i++) {
-        if (firedRockets[i].is_visible) {
-            cairo_move_to(cr, firedRockets[i].col * cell_size, firedRockets[i].row * cell_size);
-            cairo_show_text(cr, firedRockets[i].symbol);
-        }
-    }
-
-    // Zeichne die einfachen Zielobjekte
-    for (int i = 0; i < 10; i++) {
-        if (targetEasy[i].is_visible) {
-            cairo_move_to(cr, targetEasy[i].col * cell_size, targetEasy[i].row * cell_size);
-            cairo_show_text(cr, targetEasy[i].symbol);
-        }
-    }
-
-    // Zeichne die anspruchsvollen Zielobjekte
-    for (int i = 0; i < 5; i++) {
-        if (targetKingpin[i].is_visible) {
-            cairo_move_to(cr, targetKingpin[i].col * cell_size, targetKingpin[i].row * cell_size);
-            cairo_show_text(cr, targetKingpin[i].symbol);
-        }
-    }
-
-    return FALSE;
-}
-
-// Funktion zum Bewegen der Spielobjekte
-gboolean move_symbols(gpointer user_data) {
-    // Bewege die abgefeuerten Raketen nach oben
-    for (int i = 0; i < 100; i++) {
-        if (firedRockets[i].is_visible) {
-            firedRockets[i].row--;
-
-            if (firedRockets[i].row < 0) {
-                firedRockets[i].is_visible = FALSE;
-            }
-        }
-    }
-
-    // Hier entferne den Aufruf von check_collisions()
-    // check_collisions();
-
-    // Bewege die einfachen Zielobjekte
-    for (int i = 0; i < 10; i++) {
-        if (targetEasy[i].is_visible) {
-            if (targetEasy[i].move_down) {
-                targetEasy[i].col++;
-
-                if (targetEasy[i].col >= 63) {
-                    targetEasy[i].col = 63;
-                    targetEasy[i].move_down = FALSE;
-                    targetEasy[i].row++;
-                }
-            } else {
-                targetEasy[i].col--;
-
-                if (targetEasy[i].col <= 0) {
-                    targetEasy[i].col = 0;
-                    targetEasy[i].move_down = TRUE;
-                    targetEasy[i].row++;
-                }
-            }
-        }
-    }
-
-    // Hier entferne den Aufruf von check_collisions()
-    // check_collisions();
-
-    // Bewege die anspruchsvollen Zielobjekte
-    for (int i = 0; i < 5; i++) {
-        if (targetKingpin[i].is_visible) {
-            if (targetKingpin[i].move_down) {
-                targetKingpin[i].col++;
-
-                if (targetKingpin[i].col >= 63) {
-                    targetKingpin[i].col = 63;
-                    targetKingpin[i].move_down = FALSE;
-                    targetKingpin[i].row++;
-                }
-            } else {
-                targetKingpin[i].col--;
-
-                if (targetKingpin[i].col <= 0) {
-                    targetKingpin[i].col = 0;
-                    targetKingpin[i].move_down = TRUE;
-                    targetKingpin[i].row++;
-                }
-            }
-        }
-    }
-
-    // Hier entferne den Aufruf von check_collisions()
-    // check_collisions();
-
-    // Prüfe Kollisionen
-    collision_detection();
-
-    gtk_widget_queue_draw(drawing_area);
-
-    return TRUE;
-}
-
-
-// Funktion zum Behandeln des Zerstörungsereignisses des Hauptfensters
-void on_window_destroy(GtkWidget *widget, gpointer user_data) {
-    g_source_remove_by_user_data(GUINT_TO_POINTER(1));
-    gtk_main_quit();
 }
 
