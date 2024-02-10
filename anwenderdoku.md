@@ -1,9 +1,8 @@
-# Symbolbewegung - Anwenderdokumentation
+# Space Defender - Anwenderdokumentation
 
 ## Einführung
 
-Willkommen zur Anwenderdokumentation für das Spiel "Symbolbewegung". 
-Dieses Spiel wurde mit der GTK+-Bibliothek entwickelt und bietet eine einfache, aber unterhaltsame Benutzeroberfläche.
+Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mithilfe von GTK+ entwickelt wurde. 
 
 ## Inhaltsverzeichnis
 
@@ -14,31 +13,29 @@ Dieses Spiel wurde mit der GTK+-Bibliothek entwickelt und bietet eine einfache, 
 
 ## Spielstart
 
-Um das Spiel zu starten, geben Sie Ihren Benutzernamen in das Textfeld ein und klicken Sie auf "Submit". Ihr aktueller Punktestand wird angezeigt, oder falls Sie neu sind, starten Sie mit null Punkten.
+Um das Spiel zu starten, geben Sie Ihren Benutzernamen in das Textfeld ein und klicken Sie auf "Submit". Jetzt startet das Spiel.
 
 ## Spielsteuerung
 
-- **Leertaste:** Feuert eine Rakete ab.
-- **Pfeiltasten (links/rechts):** Bewegen das Symbol nach links oder rechts.
+- **Leertaste:** Feuert eine Rakete vom Raumschiff ab.
+- **Pfeiltasten (links/rechts):** Bewegt das Raumschiff des Spielers nach links oder rechts.
 
 ## Ziel des Spiels
 
-Das Ziel des Spiels ist es, so viele Symbole wie möglich abzuschießen und dabei Punkte zu sammeln. Es gibt verschiedene Zielobjekte, die unterschiedliche Punkte wert sind.
+Das Ziel des Spiels ist es, so viele Gegner wie möglich abzuschießen und dabei Punkte zu sammeln. Es gibt verschiedene Zielobjekte, die unterschiedliche Punkte wert sind.
 
 ## Punkte und Highscore
 
-Ihr Punktestand wird oben auf dem Bildschirm angezeigt. Schießen Sie Symbole ab, um Punkte zu sammeln. Der Highscore wird gespeichert und kann in der Datei "userNames_scores.log" nachverfolgt werden.
+Ihr Punktestand wird oben auf dem Bildschirm angezeigt. Schießen Sie Gegner ab, um Punkte zu sammeln. Der Highscore wird gespeichert und kann in der Datei "userNames_scores.log" nachverfolgt werden.
 
 ## Anforderungen
-
-Stellen Sie sicher, dass Sie die folgenden Voraussetzungen erfüllen, um das Spiel reibungslos auszuführen:
 
 - GCC (GNU Compiler Collection)
 - GTK+ 3.0-Bibliothek und zugehörige Entwicklungsbibliotheken
 
 ## Kompilierung und Ausführung
 
-Verwenden Sie den GCC-Befehl zum Kompilieren des Spiels:
+Verwenden Sie folgenden GCC-Befehl zum Kompilieren des Spiels:
 
 ```bash
 gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
