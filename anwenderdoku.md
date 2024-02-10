@@ -13,7 +13,7 @@ Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mith
 
 ## Spielstart
 
-Um das Spiel zu starten, geben Sie Ihren Benutzernamen in das Textfeld ein und klicken Sie auf "Submit". Jetzt startet das Spiel.
+Um das Spiel zu starten, geben Sie Ihren Benutzernamen in das Textfeld ein und klicken Sie auf "Submit". Es öffnet sich nun das Spielfeldfenster.
 
 ## Spielsteuerung
 
