@@ -1,7 +1,7 @@
-# SimpleSpaceInvader - Entwicklerdokumentation
+# Space Defender - Entwicklerdokumentation
 
 ## Einführung
-Dies ist eine einfache Anwendung für ein Spiel mit beweglichen Symbolen unter Verwendung der GTK-Bibliothek in C. Die Anwendung zeigt ein Fenster mit zwei Tabs: "User Input" für die Benutzereingabe und "Game Display" für die Spielanzeige.
+Dies ist eine Anwendung für ein Spiel mit beweglichen Symbolen unter Verwendung der GTK-Bibliothek in C. Die Anwendung zeigt ein Fenster mit zwei Tabs: "User Input" für die Benutzereingabe und "Game Display" für die Spielanzeige.
 
 ## Plattform
 Die Anwendung wurde auf der GTK-Plattform entwickelt, einer plattformübergreifenden Toolkit-Bibliothek für die Erstellung von grafischen Benutzeroberflächen.
@@ -10,18 +10,15 @@ Die Anwendung wurde auf der GTK-Plattform entwickelt, einer plattformübergreife
 Diese Anwendung unterliegt den Lizenzbestimmungen der GTK-Bibliothek, die unter der LGPL (GNU Lesser General Public License) steht. Bitte überprüfen Sie die entsprechenden Lizenzinformationen für die Nutzung und Verteilung.
 
 ## Externe Bibliotheken
-Die Anwendung verwendet die GTK-Bibliothek in der Version [XXXX] (bitte Version einfügen). Stellen Sie sicher, dass Sie die entsprechende Version der GTK-Bibliothek installiert haben, um die Anwendung auszuführen.
+Die Anwendung verwendet die GTK-Bibliothek in der Version 3.0. Die korrekte Ausführung des Programms wird nur für diese Version gewährleistet.
 
 ## Anleitung zum Kompilieren und Ausführen des Spiels
 
-### Plattform und Bibliotheken
-
-Das Spiel wurde auf der GTK+-Bibliothek entwickelt und für die Kompilierung und Ausführung wird GCC (GNU Compiler Collection) verwendet. Stellen Sie sicher, dass Sie GTK+ und die erforderlichen Entwicklungsbibliotheken installiert haben.
+### Anforderungen
+- GTK3.0
+- GCC (GNU Compiler Collection)
 
 ### Kompilierungsbefehl
-
-Verwenden Sie den folgenden GCC-Befehl zum Kompilieren des Spiels:
-
 ```bash
 gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
 ```
@@ -53,7 +50,7 @@ gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
 - `targetKingpinSymbol`: Symbol für anspruchsvolle Zielobjekte.
 
 ## Zeiten
-- `targetInitialTime`: Initiale Zeit für die Bewegung der Zielobjekte (in ms).
+- `targetInitialTime`: Startzeit für die Bewegung der Zielobjekte (in ms).
 - `rocketMoveDelay`: Zeitliche Verzögerung für die kontinuierliche Bewegung der Raketen (in ms).
 - `rocketMoveId`: ID für die Zeitsteuerung der Rocket-Bewegung.
 
