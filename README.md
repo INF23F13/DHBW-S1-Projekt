@@ -2,10 +2,10 @@
 # SpaceInvadersGUI
 
 ## 1. Projektteilnehmer
-- Gehl, Torsten
-- Intorre, Francesco
-- Serban, Daniel
-- Biser, Michael
+- Gehl, Torsten 	(T0rstenGeh1)
+- Intorre, Francesco 	(frani1611)
+- Serban, Daniel 	(OkCool5)
+- Biser, Michael 	(WomboCombo53)
 
 Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 
@@ -16,12 +16,13 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 ### 2.1.1 Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
 #### Voraussetzungen
 Linux-System mit GTK3.0 Desktopoberfläche (z.B. Ubuntu Desktop)
+Windows-System ist möglich mithilfe von GTK3.0 + MSYS2; wird jedoch nicht empfohlen.
 
 #### Funktionsumfang
-- Es muss eine grafische Benutzer Oberflaeche vom Anwender gestartet werden koennen.
+- Es muss eine grafische Benutzeroberflaeche vom Anwender gestartet werden koennen.
 
 - Nach dem Start des Programmes soll der Anwender seinen Anwendernamen eingeben
-	- ist der Anwender nicht hinterlegt, muss sein Anwendername erst nach Beendigung des Spieles in die hinterlegte Anwenderliste aufgenommen werden mit Namen, erreichte Punktzahl und Datum des letzten Spieles 
+	- ist der Anwender nicht hinterlegt, muss sein Anwendername erst nach Beendigung des Spieles in die hinterlegte Anwenderliste aufgenommen werden mit Namen, erreichter Punktzahl und Datum des letzten Spieles 
 
 - Nach der Eingabe des Anwendernamens soll ein Highscore-Ranking angezeigt werden von allen Anwendern absteigend sortiert mit Datum des letzen Highscore
 
