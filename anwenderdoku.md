@@ -9,7 +9,9 @@ Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mith
 1. [Spielstart](#spielstart)
 2. [Spielsteuerung](#spielsteuerung)
 3. [Ziel des Spiels](#ziel-des-spiels)
-4. [Punkte und Highscore](#punkte-und-highscore) 5. [Anforderungen](#anforderungen) 6. [Kompilierung und Ausführung](#kompilierung-und-ausführung)
+4. [Punkte und Highscore](#punkte-und-highscore)
+5. [Anforderungen](#anforderungen)
+6. [Kompilierung und Ausführung](#kompilierung-und-ausführung)
 
 ## Spielstart
 
