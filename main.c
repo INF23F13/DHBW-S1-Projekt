@@ -1,4 +1,56 @@
 #include <gtk/gtk.h>
+#include <SDL2/SDL.h> //DANIEL
+#include <SDL2/SDL_mixer.h> //DANIEL
+
+//DANIEL SOUND START
+//sound_initial(); //DANIEL
+//play_move_sound(); //DANIEL
+
+Mix_Chunk *move_sound; 
+Mix_Chunk *shoot_sound; 
+Mix_Chunk *enemy_hit;
+Mix_Chunk *damage_sound;
+Mix_Chunk *game_start;
+
+int moving_dir = 0; //left is 1, right is 2
+
+Mix_Music *level_ambience;
+Mix_Music *music_jingle;
+
+int music_channel = 0;
+int game_start_channel = 1;
+int shoot_channel = 2;
+int move_channel = 3;
+int enemy_hit_channel = 4;
+int damage_channel = 5;
+
+int sound_initial() {
+  SDL_Init(SDL_INIT_AUDIO);
+  Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 512); //1024
+  //Mix_Music
+  move_sound = Mix_LoadWAV("Sound/move_sound_fx.wav");
+  shoot_sound = Mix_LoadWAV("Sound/shoot_fx.wav");
+  enemy_hit = Mix_LoadWAV("Sound/enemy_hit_fx.wav");
+  damage_sound = Mix_LoadWAV("Sound/damage_sound.wav");
+  game_start = Mix_LoadWAV("Sound/game_start_sound.wav");
+  level_ambience = Mix_LoadMUS("Sound/level_ambience.mp3");
+  music_jingle = Mix_LoadMUS("Sound/music_jingle.mp3");
+}
+void cleanup_sound() {
+  Mix_FreeMusic(level_ambience);
+  Mix_FreeChunk(move_sound);
+  Mix_HaltChannel(-1);
+  Mix_CloseAudio();
+  Mix_Quit();
+  SDL_Quit();
+}
+//Mix_PlayMusic(level_ambience, -1)
+//Mix_PlayChannel(-1, move_sound, 0)
+
+//DANIEL SOUND FINISH
+
+
+
 
 // Globale Variablen für das Hauptfenster und die Spielobjekte
 GtkWidget *window;
@@ -67,7 +119,10 @@ gboolean read_user_scores(const gchar *username, int *points);
 
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
-
+    
+    sound_initial(); //DANIEL
+    Mix_PlayMusic(music_jingle, -1); //DANIEL background music
+    
     // Hauptfenster erstellen
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "Space Defender");
@@ -119,6 +174,12 @@ int main(int argc, char *argv[]) {
 void start_game(GtkWidget *widget, gpointer user_data) {
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry));
 
+    sound_initial(); //DANIEL
+    Mix_FadeOutMusic(240);
+    Mix_HaltChannel(game_start_channel);
+    Mix_PlayChannel(game_start_channel, game_start, 0);
+    Mix_PlayMusic(level_ambience, -1); //DANIEL background music
+
     int points = 0;
     if (read_user_scores(username, &points)) {
         loggedInUser.userPoints = points;
@@ -169,6 +230,8 @@ void start_game(GtkWidget *widget, gpointer user_data) {
     gtk_widget_show_all(window);
 
     gtk_main();
+    
+    cleanup_sound();//DANIEL
 }
 
 void update_score(const gchar *username, int points) {
@@ -219,8 +282,12 @@ void on_window_destroy(GtkWidget *widget, gpointer user_data) {
 gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
     switch (event->keyval) {
         case GDK_KEY_space:
+            //Mix_HaltChannel(shoot_channel);
             for (int i = 0; i < 100; i++) {
                 if (!firedRockets[i].is_visible) {
+		    Mix_HaltChannel(shoot_channel);
+                    Mix_PlayChannel(shoot_channel, shoot_sound, 0);
+
                     firedRockets[i].row = cross_row;
                     firedRockets[i].col = cross_col;
                     firedRockets[i].is_visible = TRUE;
@@ -230,10 +297,31 @@ gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
             }
             break;
         case GDK_KEY_Left:
-            cross_col = MAX(1, cross_col - 1);
+            //Bewege ich mich bereits rechts und spiele den sound nicht ab? 
+            if (moving_dir == 1 && Mix_Playing(move_channel) == 1) {
+            cross_col = MAX(1, cross_col - 1); // Update position
+            }   else { //2 means moving right
+                // Change direction and play sound
+                Mix_HaltChannel(move_channel);
+                Mix_PlayChannel(move_channel, move_sound, -1); //Loop indefinitely
+                // Schedule for release after duration
+                Mix_ExpireChannel(move_channel, 420); //420ms
+                moving_dir = 1;
+                cross_col = MAX(1, cross_col - 1); //Update position
+                }
             break;
         case GDK_KEY_Right:
-            cross_col = MIN(64, cross_col + 1);
+            //Bewege ich mich bereits rechts und spiele den sound nicht ab? 
+            if (moving_dir == 2 && Mix_Playing(move_channel) == 1) {
+            cross_col = MIN(64, cross_col + 1); //Update position
+            }   else { //1 means moving left
+                Mix_HaltChannel(move_channel);
+                Mix_PlayChannel(move_channel, move_sound, -1); //Loop indefinitely
+                // Schedule for release after duration
+                Mix_ExpireChannel(move_channel, 420); //420ms
+                moving_dir = 2;
+                cross_col = MIN(64, cross_col + 1); //Update position
+                }
             break;
         default:
             break;
@@ -364,6 +452,8 @@ void collision_detection() {
             for (int j = 0; j < 10; j++) {
                 if (targetEasy[j].is_visible && firedRockets[i].row == targetEasy[j].row && firedRockets[i].col == targetEasy[j].col) {
                     // Kollision mit einfachem Zielobjekt
+                    Mix_HaltChannel(enemy_hit_channel); //DANIEL
+                    Mix_PlayChannel(enemy_hit_channel, enemy_hit, 0); //DANIEL
                     firedRockets[i].is_visible = FALSE;
                     targetEasy[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetEasy[j].points;
@@ -377,6 +467,8 @@ void collision_detection() {
             for (int j = 0; j < 5; j++) {
                 if (targetKingpin[j].is_visible && firedRockets[i].row == targetKingpin[j].row && firedRockets[i].col == targetKingpin[j].col) {
                     // Kollision mit anspruchsvollem Zielobjekt
+                    Mix_HaltChannel(enemy_hit_channel); //DANIEL
+                    Mix_PlayChannel(enemy_hit_channel, enemy_hit, 0); //DANIEL
                     firedRockets[i].is_visible = FALSE;
                     targetKingpin[j].is_visible = FALSE;
                     loggedInUser.userPoints += targetKingpin[j].points;
@@ -405,6 +497,8 @@ void collision_detection() {
 
     // Wenn alle Zielobjekte getroffen wurden, erstelle neue und verdopple die Bewegungsgeschwindigkeit
     if (all_targets_hit) {
+        Mix_HaltChannel(damage_channel);
+	Mix_PlayChannel(damage_channel, damage_sound, 0);
         for (int i = 0; i < 10; i++) {
             targetEasy[i].row = 2;
             targetEasy[i].col = i * 2;

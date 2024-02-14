@@ -1,0 +1,1 @@
+gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0 gstreamer-1.0 sdl2 SDL2_mixer`
