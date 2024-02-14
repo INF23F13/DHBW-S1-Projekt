@@ -15,8 +15,8 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 
 ### 2.1.1 Beschreibung von Funktionsumfang und Funktionsweise aus Anwendersicht
 #### Voraussetzungen
-Linux-System mit GTK3.0 Desktopoberfläche (z.B. Ubuntu Desktop)
-Windows-System ist möglich mithilfe von GTK3.0 + MSYS2; wird jedoch nicht empfohlen.
+- Linux-System mit GTK3.0 Desktopoberfläche (z.B. Ubuntu Desktop)
+- Windows-System ist möglich mithilfe von GTK3.0 + MSYS2; wird jedoch nicht empfohlen.
 
 #### Funktionsumfang
 - Es muss eine grafische Benutzeroberflaeche vom Anwender gestartet werden koennen.
