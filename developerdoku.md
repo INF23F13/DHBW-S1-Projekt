@@ -12,17 +12,32 @@ Diese Anwendung unterliegt den Lizenzbestimmungen der GTK-Bibliothek, die unter 
 ## Externe Bibliotheken
 Die Anwendung verwendet die GTK-Bibliothek in der Version 3.0. Die korrekte Ausführung des Programms wird nur für diese Version gewährleistet.
 
-## Anleitung zum Kompilieren und Ausführen des Spiels
+## Installation
 
-### Anforderungen
-- GTK3.0
+### Anforderungen (benötigte Pakete)
+- GTK3.0 + GTK3-Dev
 - GCC (GNU Compiler Collection)
 
-### Kompilierungsbefehl
+#### Ubuntu/Debian
+```bash
+sudo apt update
+sudo apt install libgtk-3-0 libgtk-3-dev build-essential git
+```
+
+#### Repo klonen
+```bash
+git clone https://github.com/INF23F13/DHBW-S1-Projekt
+```
+
+#### Kompilierungsbefehl
 ```bash
 gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
 ```
 
+#### Spiel starten
+```bash
+./main
+```
 
 ## Globale Variablen
 - `GtkWidget *window`: Das Hauptfenster der Anwendung.
