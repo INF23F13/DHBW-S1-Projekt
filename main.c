@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
     // Hauptfenster erstellen
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Symbolbewegung");
+    gtk_window_set_title(GTK_WINDOW(window), "Space Defender");
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 800);
     g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(on_window_destroy), NULL);
 

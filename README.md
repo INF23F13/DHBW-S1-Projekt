@@ -26,9 +26,9 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 
 - Nach der Eingabe des Anwendernamens soll ein Highscore-Ranking angezeigt werden von allen Anwendern absteigend sortiert mit Datum des letzen Highscore
 
-- Der Anwender soll dann über einen Button gefragt werden ob er das Spiel beginnen moechte
+- Der Anwender soll dann über einen Button gefragt werden, ob er das Spiel beginnen moechte
 
-- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rehcts navigiren
+- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rechts navigiren
 
 - Das Spielfeld muss in 64 Reihen und 64 Spalten unterteilt werden.
 
@@ -39,9 +39,9 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 	- Auf der Zeile 1 (row1) bewegen sich die KinPin-Target-Objekte.
 	- Auf der Zeile 2 (row2) bewegen sich die Simple-Target-Objekte.
 
-- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzten" koennen.
+- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzen" koennen.
 
-- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die aktuelle Punktzahl summieren und das "getroffene" TargetObjekt muss vom Feld geloescht werden.
+- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die aktuelle Punktzahl summiert und das "getroffene" TargetObjekt muss vom Feld geloescht werden.
 
 - der Durchlauf des Programms endet, wenn keine verbleibenden Targetobjekte auf dem Spielfeld verbleiben.
 
@@ -50,7 +50,7 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 ### 2.1.2  Angestrebte Lösung aus technischer Sicht
 
 1. technisches Erstkonzept 
-- Das Programm wird für Windows OS entwickelt.
+- Das Programm wird für Linux entwickelt.
 
 - Es muss eine GPL3 oder Apache License V2.0 Library für die grafische Benutzer Oberflaeche verwendet werden (vgl. GTK).
 
@@ -65,7 +65,7 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
 - Der Anwender soll dann über einen Button gefragt werden ob er das Spiel beginnen moechte.
 	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
 
-- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rehcts navigiren
+- Der Anwender muss dann über die Bedienungselemente Pfeiltasten sein "Spaceship" von links nach rechts navigieren
 	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
 
 - Das Spielfeld muss in 64 Reihen und 64 Spalten unterteilt werden.
@@ -79,14 +79,14 @@ Kontakt: inf23187@lehre.dhbw-stuttgart.de (Michael)
         - Auf der Zeile 1 (row1) bewegen sich die KinPin-Target-Objekte.
         - Auf der Zeile 2 (row2) bewegen sich die Simple-Target-Objekte.
 
-- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzten" koennen.
+- Der Anwender muss unter Verwendung der Leertaste ein "Rocket Objekt" von seiner aktuellen Position aus "absetzen" koennen.
 	- Es muss geprueft werden, ob es hierzu ebenfalls Methoden/Funktionen in der verwendeten Library gibt
 	- Rocket-Objekt bewegt sich mit 0.25 (Sekunden/Feld) orthogonal (kein Drift) Richtung Row1/Row2
-	- die Betaetigung der Leertaste ist gekoppelt mit der Erzeugung eines Reocket-Objektes. Es wird eine Art Eventlistener benoetigt.
+	- die Betaetigung der Leertaste ist gekoppelt mit der Erzeugung eines Rocket-Objektes. Es wird eine Art Eventlistener benoetigt.
 	- Startpostion Column = Endpositon Column
 	- Startpostion Row = Endpositon (Row - 62/63)
 
-- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die ak>
+- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die aktuelle Punktzahl addiert werden
 	- es muss eine Funktion geschrieben werden, welche die Gleichheit der Reihen und Spalten Elemente von Target-Objekt und Rocket-Objekt prueft.
 	- bei Gleichheit muss actualPointsscore + Attribut Point vom Target-Obejkt berechnet werden.
 
