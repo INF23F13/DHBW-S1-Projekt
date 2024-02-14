@@ -1,5 +1,5 @@
 # Programmierprojekt 23F, 1. Semester
-# SpaceInvadersGUI
+# Space Defender
 
 ## 1. Projektteilnehmer
 - Gehl, Torsten 	(T0rstenGeh1)
