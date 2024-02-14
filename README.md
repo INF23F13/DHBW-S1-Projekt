@@ -65,7 +65,7 @@ Windows-System ist möglich mithilfe von GTK3.0 + MSYS2; wird jedoch nicht empfo
 - Der Anwender soll dann über einen Button gefragt werden ob er das Spiel beginnen moechte.
 	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
 
-- Der Anwender muss dann über die Bedingungselemente Pfeiltasten sein "Spaceship" von links nach rechts navigieren
+- Der Anwender muss dann über die Bedienungselemente Pfeiltasten sein "Spaceship" von links nach rechts navigieren
 	- dazu wird eine von der verwendeteten Library bereitgestellte Funktion/Methode (noch nicht bekannt, vgl. GTK) umgesetzt.
 
 - Das Spielfeld muss in 64 Reihen und 64 Spalten unterteilt werden.
@@ -86,7 +86,7 @@ Windows-System ist möglich mithilfe von GTK3.0 + MSYS2; wird jedoch nicht empfo
 	- Startpostion Column = Endpositon Column
 	- Startpostion Row = Endpositon (Row - 62/63)
 
-- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die ak>
+- befindet sich das vom Anwender abgesetzte Rocket-Objekte im gleichen Feld wie eines der Target Objekte, muss die dem Target-Objekt zugeordnete Punktzahl auf die aktuelle Punktzahl addiert werden
 	- es muss eine Funktion geschrieben werden, welche die Gleichheit der Reihen und Spalten Elemente von Target-Objekt und Rocket-Objekt prueft.
 	- bei Gleichheit muss actualPointsscore + Attribut Point vom Target-Obejkt berechnet werden.
 
