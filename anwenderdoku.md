@@ -6,12 +6,39 @@ Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mith
 
 ## Inhaltsverzeichnis
 
-1. [Spielstart](#spielstart)
-2. [Spielsteuerung](#spielsteuerung)
-3. [Ziel des Spiels](#ziel-des-spiels)
-4. [Punkte und Highscore](#punkte-und-highscore)
-5. [Anforderungen](#anforderungen)
-6. [Kompilierung und Ausführung](#kompilierung-und-ausführung)
+1. [Installation](#installation)
+2. [Spielstart](#spielstart)
+3. [Spielsteuerung](#spielsteuerung)
+4. [Ziel des Spiels](#ziel-des-spiels)
+5. [Punkte und Highscore](#punkte-und-highscore)
+6. [Anforderungen](#anforderungen)
+
+## Installation
+
+### Anforderungen (benötigte Pakete)
+- GTK3.0 + GTK3-Dev
+- GCC (GNU Compiler Collection)
+
+#### Ubuntu/Debian
+```bash
+sudo apt update
+sudo apt install libgtk-3-0 libgtk-3-dev build-essential git
+```
+
+#### Repo klonen
+```bash
+git clone https://github.com/INF23F13/DHBW-S1-Projekt
+```
+
+#### Kompilierungsbefehl
+```bash
+gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
+```
+
+#### Spiel starten
+```bash
+./main
+```
 
 ## Spielstart
 
@@ -29,15 +56,3 @@ Das Ziel des Spiels ist es, so viele Gegner wie möglich abzuschießen und dabei
 ## Punkte und Highscore
 
 Ihr Punktestand wird oben auf dem Bildschirm angezeigt. Schießen Sie Gegner ab, um Punkte zu sammeln. Der Highscore wird gespeichert und kann in der Datei "userNames_scores.log" nachverfolgt werden.
-
-## Anforderungen
-
-- GCC (GNU Compiler Collection)
-- GTK+ 3.0-Bibliothek und zugehörige Entwicklungsbibliotheken
-
-## Kompilierung und Ausführung
-
-Verwenden Sie folgenden GCC-Befehl zum Kompilieren des Spiels:
-
-```bash
-gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
