@@ -11,7 +11,6 @@ Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mith
 3. [Spielsteuerung](#spielsteuerung)
 4. [Ziel des Spiels](#ziel-des-spiels)
 5. [Punkte und Highscore](#punkte-und-highscore)
-6. [Anforderungen](#anforderungen)
 
 ## Installation
 
