@@ -17,6 +17,7 @@ Willkommen zur Anwenderdokumentation für das Spiel Space Defender, welches mith
 ### Anforderungen (benötigte Pakete)
 - GTK3.0 + GTK3-Dev
 - GCC (GNU Compiler Collection)
+- SDL2 (Sound Library)
 
 #### Ubuntu/Debian
 ```bash
