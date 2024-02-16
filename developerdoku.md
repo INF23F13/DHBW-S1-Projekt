@@ -17,11 +17,13 @@ Die Anwendung verwendet die GTK-Bibliothek in der Version 3.0. Die korrekte Ausf
 ### Anforderungen (benötigte Pakete)
 - GTK3.0 + GTK3-Dev
 - GCC (GNU Compiler Collection)
+- SDL2 (Sound Library)
 
 #### Ubuntu/Debian
 ```bash
 sudo apt update
 sudo apt install libgtk-3-0 libgtk-3-dev build-essential git
+sudo apt install libsdl2-dev libsdl2-mixer-dev
 ```
 
 #### Repo klonen
@@ -31,7 +33,7 @@ git clone https://github.com/INF23F13/DHBW-S1-Projekt
 
 #### Kompilierungsbefehl
 ```bash
-gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0`
+gcc -o main main.c -g `pkg-config --cflags --libs gtk+-3.0 sdl2 SDL2_mixer`
 ```
 
 #### Spiel starten
